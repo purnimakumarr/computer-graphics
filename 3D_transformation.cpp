@@ -3,7 +3,7 @@
 #include<cctype>
 #include<math.h>
 
-using namespace std;
+using namespace std; 
 
 // globally defined array for co-ordinates of sqaure
 int cube[8][4];
@@ -30,6 +30,24 @@ void multi_matrix() {
       }    
     }    
   } 
+}
+
+// plot the transformed cube
+void display(int max_x, int max_y) {
+  int i;
+  for(i = 0; i < 3; i++) {
+    line(max_x + result[i][0], max_y - result[i][1], max_x + result[i + 1][0], max_y - result[i + 1][1]);
+  }
+  line(max_x + result[3][0], max_y - result[3][1], max_x + result[0][0], max_y - result[0][1]);
+  for(i = 4; i < 7; i++) {
+    line(max_x + result[i][0], max_y - result[i][1], max_x + result[i + 1][0], max_y - result[i + 1][1]);
+  }
+  line(max_x + result[7][0], max_y - result[7][1], max_x + result[4][0], max_y - result[4][1]);
+  line(max_x + result[0][0], max_y - result[0][1], max_x + result[4][0], max_y - result[4][1]);
+  line(max_x + result[1][0], max_y - result[1][1], max_x + result[5][0], max_y -  result[5][1]);
+  line(max_x + result[3][0], max_y - result[3][1], max_x + result[7][0], max_y -  result[7][1]);
+  line(max_x + result[2][0], max_y - result[2][1], max_x + result[6][0], max_y - result[6][1]);
+
 }
 
 // Scaling down the co-ordinate system to the middle of the screen
@@ -80,13 +98,14 @@ void projection_ortho() {
   } 
 
   int gd = DETECT, gm;
+  // initwindow(1000, 1000);
   initgraph(&gd, &gm, (char*)"");
   int max_x = getmaxx() / 2, max_y = getmaxy() / 2;
   scale_down(max_x, max_y);
   setcolor(LIGHTBLUE);
 
   // draw the transformed figure
-  
+  display(max_x, max_y);
 }
 
 // Perform scaling on the cube
@@ -129,6 +148,13 @@ void scaling_overall(float f) {
   }
 
   multi_matrix();
+
+  // normalizing
+  for(int i = 0; i < 8; i++) {
+    for(int j = 0; j < 4; j++) {
+      cube_t[i][j] /= f;
+    }
+  }
 }
 
 // Perform rotation about the x-axis; flag = 0 => clockwise || flag = 1 => anti-clockwise
@@ -334,25 +360,69 @@ int main(int argc, char const *argv[])
   cout<<"\nPERFORM 3D TRANSFORMATIONS ON A CUBE";
   cout<<"\n=============================================";
 
-  cout<<"\n\nEnter the co-ordinates of cube:-\n";
-  for(int i = 0; i < 8; i++) {
-    cout<<"Row "<<i+1<<" : ";
-    for(int j = 0; j < 4; j++) {
-       cin>>cube[i][j];
-    }
-  } 
+  // cout<<"\n\nEnter the co-ordinates of cube:-\n";
+  // for(int i = 0; i < 8; i++) {
+  //   cout<<"Row "<<i+1<<" : ";
+  //   for(int j = 0; j < 4; j++) {
+  //      cin>>cube[i][j];
+  //   }
+  // } 
+
+  cube[0][0] = 0;
+  cube[0][1] = 0;
+  cube[0][2] = 50;
+
+  cube[1][0] = 100;
+  cube[1][1] = 0;
+  cube[1][2] = 50;
+
+  cube[2][0] = 100;
+  cube[2][1] = 150;
+  cube[2][2] = 50;
+
+  cube[3][0] = 0;
+  cube[3][1] = 150;
+  cube[3][2] = 50;
+
+  cube[4][0] = 0;
+  cube[4][1] = 0;
+  cube[4][2] = 0;
+
+  cube[5][0] = 100;
+  cube[5][1] = 0;
+  cube[5][2] = 0;
+
+  cube[6][0] = 100;
+  cube[6][1] = 150;
+  cube[6][2] = 0;
+
+  cube[7][0] = 0;
+  cube[7][1] = 150;
+  cube[7][2] = 0;
 
   // convert to homogeneous co-ordinate system
   cube[0][3] = 1;
   cube[1][3] = 1;
   cube[2][3] = 1;
   cube[3][3] = 1;
+  cube[4][3] = 1;
+  cube[5][3] = 1;
+  cube[6][3] = 1;
+  cube[7][3] = 1;
+
+  cout<<"\nOriginal cube:-\n";
+  for(int i = 0; i < 8; i++) {
+    for(int j = 0; j < 4; j++) {
+       cout<<cube[i][j]<<"\t";
+    }
+    cout<<endl;
+  } 
 
   do {
     cout<<"\n\n---------------------------";
     cout<<"\n\tMAIN MENU";
     cout<<"\n-----------------------------";
-    cout<<"\n1. Scaling in x component";
+    cout<<"\n1. Local Scaling";
     cout<<"\n2. Overall Scaling";
     cout<<"\n3. Rotation about x-axis (CLOCKWISE)";
     cout<<"\n4. Rotation about y-axis (CLOCKWISE)";
@@ -371,7 +441,7 @@ int main(int argc, char const *argv[])
     switch(op) {
       case 1: {
         float fx, fy, fz;
-        cout<<"\nYOU ARE PERFORMING SCALING\n";
+        cout<<"\nYOU ARE PERFORMING LOCAL SCALING\n";
         cout<<"Enter the scaling factors:-\n";
         cout<<"fx: ";
         cin>>fx;
@@ -381,7 +451,8 @@ int main(int argc, char const *argv[])
         cin>>fz;
         cout<<"\nTO DISPLAY THE TRANSFORMED FIGURE\n";
         cout<<"Select the type of projection you want to perform.";
-        cout<<"\t1. Orthographic Projection";
+        cout<<"\n\t1. Orthographic Projection";
+        cout<<"\nEnter choice: ";
         cin>>op_pro;
         switch(op_pro) {
           case 1: {
@@ -399,7 +470,8 @@ int main(int argc, char const *argv[])
         cin>>factor;
         cout<<"\nTO DISPLAY THE TRANSFORMED FIGURE\n";
         cout<<"Select the type of projection you want to perform.";
-        cout<<"\t1. Orthographic Projection";
+        cout<<"\n\t1. Orthographic Projection";
+        cout<<"\nEnter choice: ";
         cin>>op_pro;
         switch(op_pro) {
           case 1: {
@@ -416,7 +488,8 @@ int main(int argc, char const *argv[])
         cin>>theta;
         cout<<"\nTO DISPLAY THE TRANSFORMED FIGURE\n";
         cout<<"Select the type of projection you want to perform.";
-        cout<<"\t1. Orthographic Projection";
+        cout<<"\n\t1. Orthographic Projection";
+        cout<<"\nEnter choice: ";
         cin>>op_pro;
         switch(op_pro) {
           case 1: {
@@ -433,7 +506,8 @@ int main(int argc, char const *argv[])
         cin>>phi;
         cout<<"\nTO DISPLAY THE TRANSFORMED FIGURE\n";
         cout<<"Select the type of projection you want to perform.";
-        cout<<"\t1. Orthographic Projection";
+        cout<<"\n\t1. Orthographic Projection";
+        cout<<"\nEnter choice: ";
         cin>>op_pro;
         switch(op_pro) {
           case 1: {
@@ -450,7 +524,8 @@ int main(int argc, char const *argv[])
         cin>>alpha;
         cout<<"\nTO DISPLAY THE TRANSFORMED FIGURE\n";
         cout<<"Select the type of projection you want to perform.";
-        cout<<"\t1. Orthographic Projection";
+        cout<<"\n\t1. Orthographic Projection";
+        cout<<"\nEnter choice: ";
         cin>>op_pro;
         switch(op_pro) {
           case 1: {
@@ -464,10 +539,12 @@ int main(int argc, char const *argv[])
       case 6: {
         int theta;
         cout<<"\nYOU ARE PERFORMING ROTATION ABOUT X-AXIS (ANTI-CLOCKWISE)\n";
+        cout<<"Enter the angle by which you want to rotate the cube: ";
         cin>>theta;
         cout<<"\nTO DISPLAY THE TRANSFORMED FIGURE\n";
         cout<<"Select the type of projection you want to perform.";
-        cout<<"\t1. Orthographic Projection";
+        cout<<"\n\t1. Orthographic Projection";
+        cout<<"\nEnter choice: ";
         cin>>op_pro;
         switch(op_pro) {
           case 1: {
@@ -480,11 +557,13 @@ int main(int argc, char const *argv[])
       break;
       case 7: {
         int phi;
-        cout<<"\nYOU ARE PERFORMING ROTATION ABOUT Y-AXIS (ANTI-CLOCKWISE)\n";
+        cout<<"\nYOU ARE PERFORMING ROTATION ABOUT Y-AXIS (ANTI-CLOCKWISE)";
+        cout<<"\nEnter the angle by which you want to rotate the cube: ";
         cin>>phi;
         cout<<"\nTO DISPLAY THE TRANSFORMED FIGURE\n";
         cout<<"Select the type of projection you want to perform.";
-        cout<<"\t1. Orthographic Projection";
+        cout<<"\n\t1. Orthographic Projection";
+        cout<<"\nEnter choice: ";
         cin>>op_pro;
         switch(op_pro) {
           case 1: {
@@ -498,10 +577,12 @@ int main(int argc, char const *argv[])
       case 8: {
         int alpha;
         cout<<"\nYOU ARE PERFORMING ROTATION ABOUT Z-AXIS (ANTI-CLOCKWISE)\n";
+        cout<<"Enter the angle by which you want to rotate the cube: ";
         cin>>alpha;
         cout<<"\nTO DISPLAY THE TRANSFORMED FIGURE\n";
         cout<<"Select the type of projection you want to perform.";
-        cout<<"\t1. Orthographic Projection";
+        cout<<"\n\t1. Orthographic Projection";
+        cout<<"\nEnter choice: ";
         cin>>op_pro;
         switch(op_pro) {
           case 1: {
@@ -517,7 +598,8 @@ int main(int argc, char const *argv[])
         cout<<"Reflection relative to the XY plane has been done.";
         cout<<"\nTO DISPLAY THE TRANSFORMED FIGURE\n";
         cout<<"Select the type of projection you want to perform.";
-        cout<<"\t1. Orthographic Projection";
+        cout<<"\n\t1. Orthographic Projection";
+        cout<<"\nEnter choice: ";
         cin>>op_pro;
         switch(op_pro) {
           case 1: {
@@ -532,7 +614,8 @@ int main(int argc, char const *argv[])
         cout<<"Reflection relative to the YZ plane has been done.";
         cout<<"\nTO DISPLAY THE TRANSFORMED FIGURE\n";
         cout<<"Select the type of projection you want to perform.";
-        cout<<"\t1. Orthographic Projection";
+        cout<<"\n\t1. Orthographic Projection";
+        cout<<"\nEnter choice: ";
         cin>>op_pro;
         switch(op_pro) {
           case 1: {
@@ -547,7 +630,8 @@ int main(int argc, char const *argv[])
         cout<<"Reflection relative to the XZ plane has been done.";
         cout<<"\nTO DISPLAY THE TRANSFORMED FIGURE\n";
         cout<<"Select the type of projection you want to perform.";
-        cout<<"\t1. Orthographic Projection";
+        cout<<"\n\t1. Orthographic Projection";
+        cout<<"\nEnter choice: ";
         cin>>op_pro;
         switch(op_pro) {
           case 1: {
@@ -575,7 +659,8 @@ int main(int argc, char const *argv[])
         cin>>fz2;
         cout<<"\nTO DISPLAY THE TRANSFORMED FIGURE\n";
         cout<<"Select the type of projection you want to perform.";
-        cout<<"\t1. Orthographic Projection";
+        cout<<"\n\t1. Orthographic Projection";
+        cout<<"\nEnter choice: ";
         cin>>op_pro;
         switch(op_pro) {
           case 1: {
@@ -598,7 +683,8 @@ int main(int argc, char const *argv[])
         cin>>tz;
         cout<<"\nTO DISPLAY THE TRANSFORMED FIGURE\n";
         cout<<"Select the type of projection you want to perform.";
-        cout<<"\t1. Orthographic Projection";
+        cout<<"\n\t1. Orthographic Projection";
+        cout<<"\nEnter choice: ";
         cin>>op_pro;
         switch(op_pro) {
           case 1: {
@@ -611,6 +697,22 @@ int main(int argc, char const *argv[])
       break;
       default: cout<<"\nPlease enter a valid option.";
     };
+
+cout<<"\ntransformed cube:-\n";
+  for(int i = 0; i < 8; i++) {
+    for(int j = 0; j < 4; j++) {
+       cout<<cube_t[i][j]<<"\t";
+    }
+    cout<<endl;
+  } 
+
+    cout<<"\nResultant cube:-\n";
+  for(int i = 0; i < 8; i++) {
+    for(int j = 0; j < 4; j++) {
+       cout<<result[i][j]<<"\t";
+    }
+    cout<<endl;
+  } 
 
     cout<<"\nWant to return back to menu? (y/Y - \"Yes\", any other key - \"No\") : ";
     cin>>ch; 
