@@ -1,3 +1,5 @@
+// AIM: WRITE A PROGRAM TO IMPLEMENT BRESENHAM'S LINE DRAWING ALGORITHM.
+
 #include<graphics.h>
 #include<iostream>
 #include<math.h>

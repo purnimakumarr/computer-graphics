@@ -1,3 +1,5 @@
+// AIM: WRITE A PROGRAM TO APPLY VARIOUS 2D TRANSFORMATION ON A 2D OBJECT (USE HOMOGENOUS COORDINATES).
+
 #include<iostream>
 #include<graphics.h>
 #include<cctype>
