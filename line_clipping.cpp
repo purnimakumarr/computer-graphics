@@ -7,12 +7,12 @@
 using namespace std;
 
 typedef unsigned int outcode;
-enum boolean {f, t};
+enum b {f, t};
 enum {
-  top = 0x1,
-  bottom = 0x2, 
-  _right = 0x4, 
-  _left = 0x8
+  top = 1,
+  bottom = 2, 
+  _right = 4, 
+  _left = 8
 };
 
 outcode compoutcode(double x, double y, double xmin, double xmax, double ymin, double ymax) {
@@ -22,7 +22,8 @@ outcode compoutcode(double x, double y, double xmin, double xmax, double ymin, d
     code |= top;
   } else if(y < ymin) {
     code |= bottom;
-  } else if(x > xmax) {
+  }
+  if(x > xmax) {
     code |= _right;
   } else if(x < xmin) {
     code |= _left;
@@ -33,12 +34,12 @@ outcode compoutcode(double x, double y, double xmin, double xmax, double ymin, d
 
 void cohen(double x0, double y0, double x1, double y1, double xmin, double xmax, double ymin, double ymax) {
   outcode outcode0, outcode1, outcodeout;
-  boolean accept = f, done = f;
+  b accept = f, done = f;
   outcode0 = compoutcode(x0, y0, xmin, xmax, ymin, ymax);
   outcode1 = compoutcode(x1, y1, xmin, xmax, ymin, ymax);
 
   do {
-    if(outcode0 | outcode1) {
+    if(outcode0 == 0 && outcode1 == 0) {
       accept = t;
       done = t;
     } else if(outcode0 & outcode1) {
@@ -56,10 +57,10 @@ void cohen(double x0, double y0, double x1, double y1, double xmin, double xmax,
         x = x0 + (ymin - y0) / m;
         y = ymin;
       } else if(outcodeout & _right) {
-        y = y0 + (xmax - x0) / m;
+        y = y0 + (xmax - x0) * m;
         x = xmax;
-      } else {
-        y = y0 + (xmin - x0) / m;
+      } else if(outcodeout & _left) {
+        y = y0 + (xmin - x0) * m;
         x = xmin;
       }
 
@@ -81,55 +82,21 @@ void cohen(double x0, double y0, double x1, double y1, double xmin, double xmax,
 }
 
 int main() {
-  int x[10], y[10];
-  int xmin, xmax, ymin, ymax;
-  char* choice;
+  double x[10], y[10];
+  double xmin, xmax, ymin, ymax;
+  int choice = 'y';
+
+  int c = 0;
   
-  cout<<"========================================================================";
-  cout<<"\n\t\tCOHEN-SUTHERLAND LINE CLIPPING ALGORITHM IMPLEMENTED USING C++";
-  cout<<"========================================================================";
+  cout<<"===============================================================================";
+  cout<<"\n\t\tCOHEN-SUTHERLAND LINE CLIPPING ALGORITHM";
+  cout<<"\n=============================================================================";
   cout<<"\nNote:-";
   cout<<"\n\tYou can only clip upto 5 line against a clipping window.";
 
   int i = 0;
 
-  do {
-    cout<<"Enter the coordinates for the line: ";
-    cout<<"x0: ";
-    cin>>x[i];
-    cout<<"y0: ";
-    cin>>y[i];
-    cout<<"x1: ";
-    cin>>x[i + 1];
-    cout<<"y1: ";
-    cin>>y[i + 1];
-
-    i += 2;
-
-    cout<<"\n\nDo you want to enter coordinated for another line? ";
-    cin>>choice;
-  }while((choice == "Y" || choice == "y") && i < 10);
-
-  // cout<<"Enter the coordinates for the line: ";
-  // cout<<"x0: ";
-  // cin>>x0;
-  // cout<<"y0: ";
-  // cin>>y0;
-  // cout<<"x1: ";
-  // cin>>x1;
-  // cout<<"y1: ";
-  // cin>>y1;
-  // cout<<"Enter the coordinated for another line: ";
-  // cout<<"x0: ";
-  // cin>>x2;
-  // cout<<"y0: ";
-  // cin>>y2;
-  // cout<<"x1: ";
-  // cin>>x3;
-  // cout<<"y1: ";
-  // cin>>y3;
-
-  cout<<"\nEnter the coordinates of the clipping window: ";
+  cout<<"\nEnter the coordinates of the clipping window:-\n";
   cout<<"xmin: ";
   cin>>xmin;
   cout<<"xmax: ";
@@ -139,25 +106,43 @@ int main() {
   cout<<"ymax: ";
   cin>>ymax;
 
-  int gd = DETECT, gm;
-  initgraph(&gd, &gm, (char*)"");
-  setbkcolor(4);
+  for( ; (choice == 'Y' || choice == 'y') && i < 10; i += 2) {
+    cout<<"\nEnter the coordinates for the line:-\n";
+    cout<<"x0: ";
+    cin>>x[i];
+    cout<<"y0: ";
+    cin>>y[i];
+    cout<<"x1: ";
+    cin>>x[i + 1];
+    cout<<"y1: ";
+    cin>>y[i + 1];
 
-  cout<<"\nBEFORE CLIPPING THE LINES ARE:-";
+    cout<<"\n\nDo you want to enter coordinates for another line? ";
+    cin>>choice;
+  }
+
+  int gd = DETECT, gm;
+  initgraph(&gd, &gm, (char*)"C:\\TURBOC3\\BGI");
+  setbkcolor(4);
   rectangle(xmin, ymin, xmax, ymax);
   for(int j = 0; j < i; j += 2) {
     line(x[j], y[j], x[j + 1], y[j + 1]);
   }
 
-  initgraph(&gd, &gm, (char*)"");
+  delay(100);
+
+  initgraph(&gd, &gm, (char*)"C:\\TURBOC3\\BGI");
   setbkcolor(6);
-  setcolor(1);
+  setcolor(RED);
   setlinestyle(DOTTED_LINE, 1, 1);
   
-  cout<<"AFTER CLIPPING THE LINES ARE";
   rectangle(xmin, ymin, xmax, ymax);
   for(int j = 0; j < i; j += 2) {
     cohen(x[j], y[j], x[j + 1], y[j + 1], xmin, xmax, ymin, ymax);
+    c++;
   }
+
+  getch();
+  closegraph();
   return 1;
 }
