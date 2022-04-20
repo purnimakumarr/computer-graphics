@@ -13,4 +13,4 @@ This is my code for the core paper Computer Graphics((BHCS14) I completed during
 5. Write a program to fill a polygon using Scan line fill algorithm.
 6. Write a program to apply various 2D transformations on a 2D object (use homogenous Coordinates).
 7. Write a program to apply various 3D transformations on a 3D object and then apply parallel and perspective projection on it.
-8. Write a program to draw Hermite /Bezier curve.
+8. Write a program to draw Hermite/Bezier curve.
