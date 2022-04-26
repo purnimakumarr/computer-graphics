@@ -362,46 +362,14 @@ int main(int argc, char const *argv[])
   cout<<"\nPERFORM 3D TRANSFORMATIONS ON A CUBE";
   cout<<"\n=============================================";
 
-  // cout<<"\n\nEnter the co-ordinates of cube:-\n";
-  // for(int i = 0; i < 8; i++) {
-  //   cout<<"Row "<<i+1<<" : ";
-  //   for(int j = 0; j < 4; j++) {
-  //      cin>>cube[i][j];
-  //   }
-  // } 
-
-  cube[0][0] = 0;
-  cube[0][1] = 0;
-  cube[0][2] = 50;
-
-  cube[1][0] = 100;
-  cube[1][1] = 0;
-  cube[1][2] = 50;
-
-  cube[2][0] = 100;
-  cube[2][1] = 150;
-  cube[2][2] = 50;
-
-  cube[3][0] = 0;
-  cube[3][1] = 150;
-  cube[3][2] = 50;
-
-  cube[4][0] = 0;
-  cube[4][1] = 0;
-  cube[4][2] = 0;
-
-  cube[5][0] = 100;
-  cube[5][1] = 0;
-  cube[5][2] = 0;
-
-  cube[6][0] = 100;
-  cube[6][1] = 150;
-  cube[6][2] = 0;
-
-  cube[7][0] = 0;
-  cube[7][1] = 150;
-  cube[7][2] = 0;
-
+  cout<<"\n\nEnter the co-ordinates of cube:-\n";
+  for(int i = 0; i < 8; i++) {
+    cout<<"Row "<<i+1<<" : ";
+    for(int j = 0; j < 4; j++) {
+       cin>>cube[i][j];
+    }
+  } 
+  
   // convert to homogeneous co-ordinate system
   cube[0][3] = 1;
   cube[1][3] = 1;
@@ -411,14 +379,6 @@ int main(int argc, char const *argv[])
   cube[5][3] = 1;
   cube[6][3] = 1;
   cube[7][3] = 1;
-
-  cout<<"\nOriginal cube:-\n";
-  for(int i = 0; i < 8; i++) {
-    for(int j = 0; j < 4; j++) {
-       cout<<cube[i][j]<<"\t";
-    }
-    cout<<endl;
-  } 
 
   do {
     cout<<"\n\n---------------------------";
@@ -431,7 +391,7 @@ int main(int argc, char const *argv[])
     cout<<"\n5. Rotation about z-axis (CLOCKWISE)";
     cout<<"\n6. Rotation about x-axis (ANTI-CLOCKWISE)";
     cout<<"\n7. Rotation about y-axis (ANTI-CLOCKWISE)";
-    cout<<"\n8. Rotation about z-axis (ANIT-CLOCKWISE)";
+    cout<<"\n8. Rotation about z-axis (ANTI-CLOCKWISE)";
     cout<<"\n9. Reflection relative to XY plane";
     cout<<"\n10. Reflection relative to YZ plane";
     cout<<"\n11. Reflection relative to XZ plane";
@@ -487,6 +447,7 @@ int main(int argc, char const *argv[])
       case 3: {
         int theta;
         cout<<"\nYOU ARE PERFORMING ROTATION ABOUT X-AXIS (CLOCKWISE)\n";
+        cout<<"Enter the angle by which you want to rotate the cube: ";
         cin>>theta;
         cout<<"\nTO DISPLAY THE TRANSFORMED FIGURE\n";
         cout<<"Select the type of projection you want to perform.";
@@ -505,6 +466,7 @@ int main(int argc, char const *argv[])
       case 4: {
         int phi;
         cout<<"\nYOU ARE PERFORMING ROTATION ABOUT Y-AXIS (CLOCKWISE)\n";
+        cout<<"Enter the angle by which you want to rotate the cube: ";
         cin>>phi;
         cout<<"\nTO DISPLAY THE TRANSFORMED FIGURE\n";
         cout<<"Select the type of projection you want to perform.";
@@ -523,6 +485,7 @@ int main(int argc, char const *argv[])
       case 5: {
         int alpha;
         cout<<"\nYOU ARE PERFORMING ROTATION ABOUT Z-AXIS (CLOCKWISE)\n";
+        cout<<"Enter the angle by which you want to rotate the cube: ";
         cin>>alpha;
         cout<<"\nTO DISPLAY THE TRANSFORMED FIGURE\n";
         cout<<"Select the type of projection you want to perform.";
@@ -699,22 +662,6 @@ int main(int argc, char const *argv[])
       break;
       default: cout<<"\nPlease enter a valid option.";
     };
-
-cout<<"\ntransformed cube:-\n";
-  for(int i = 0; i < 8; i++) {
-    for(int j = 0; j < 4; j++) {
-       cout<<cube_t[i][j]<<"\t";
-    }
-    cout<<endl;
-  } 
-
-    cout<<"\nResultant cube:-\n";
-  for(int i = 0; i < 8; i++) {
-    for(int j = 0; j < 4; j++) {
-       cout<<result[i][j]<<"\t";
-    }
-    cout<<endl;
-  } 
 
     cout<<"\nWant to return back to menu? (y/Y - \"Yes\", any other key - \"No\") : ";
     cin>>ch; 
