@@ -539,7 +539,7 @@ int main(int argc, char const *argv[])
     cout<<"\n1. Scaling in x component";
     cout<<"\n2. Scaling in y component";
     cout<<"\n3. Scaling in both x and y component";
-    cout<<"\n4. Overall Sacling";
+    cout<<"\n4. Overall Scaling";
     cout<<"\n5. Reflection about x-axis";
     cout<<"\n6. Reflection about y-axis";
     cout<<"\n7. Reflection about the line y = x";
